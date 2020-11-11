@@ -14,14 +14,43 @@
 #endif
 //OS portability ^^
 
-int ww, hh = 500; //width and height of window
+int ww = 500;
+int hh = 500; //width and height of window
 int fov=55; //  perspective attributes - fov
 double asp=1; // aspect ratio
 double dim=60; //size of world
 double theta = 0; //idle variable
 int th, ph = 0; //viewing angles
+int mode = 1; //camera mode
+unsigned int sky[3];
+unsigned int tex[5];
+double pos1[3]={-20.0,5.0,0.0};
+double pos2[3]={ 20.0,5.0,0.0};
+double posavg[3];
+int state1[2]={1,1};
+
 
 //Globals ^^
+
+static void skybox(double D)
+{
+   glColor3f(1,1,1);
+   glEnable(GL_TEXTURE_2D);
+   glBindTexture(GL_TEXTURE_2D,sky[0]);
+   glBegin(GL_QUADS);
+   glTexCoord2f(1,0); glVertex3f(+D,-D,-D);
+   glTexCoord2f(0,0); glVertex3f(-D,-D,-D);
+   glTexCoord2f(0,1); glVertex3f(-D,+D,-D);
+   glTexCoord2f(1,1); glVertex3f(+D,+D,-D);
+   glEnd();
+   glDisable(GL_TEXTURE_2D);
+}
+
+void avgpos(){
+  posavg[0]=(pos1[0]+pos2[0])/2;
+  posavg[1]=(pos1[1]+pos2[1])/2;
+  posavg[2]=(pos1[2]+pos2[2])/2;
+}
 
 void display()
 {
@@ -31,13 +60,38 @@ void display()
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glLoadIdentity();
-  gluLookAt(Ex,Ey,Ez , 0,0,0 , 0,Cos(ph),0);
+  gluLookAt(Ex,Ey,Ez , posavg[0],posavg[1],posavg[2] , 0,Cos(ph),0);
   stage(1,1,1,1,1,1,theta);
+  sphere(pos1[0],pos1[1],pos1[2],3,0);
+  sphere(pos2[0],pos2[1],pos2[2],3,0);
+  skybox(3.5*dim);
   glutSwapBuffers();
 }
 
 void idle()//Simple idle func from OpenGL: A Primer by Edward Angel
 {
+  switch (mode){
+    case 0:
+      break;
+    case 1:
+      if     (theta>=0 && theta<=90)    pos1[0]-=0.25;
+      else if(theta>=90 && theta<=180)  pos1[1]+=0.25;
+      else if(theta>=180 && theta<=270) pos1[0]+=0.25;
+      else if(theta>=270 && theta<=360) pos1[1]-=0.25;
+      avgpos();
+      break;
+    case 2:
+      if     (theta>=0 && theta<=90)    pos1[0]-=0.25;
+      else if(theta>=90 && theta<=180)  pos1[1]+=0.25;
+      else if(theta>=180 && theta<=270) pos1[0]+=0.25;
+      else if(theta>=270 && theta<=360) pos1[1]-=0.25;
+      if     (theta>=0 && theta<=90)    pos2[0]-=0.1;
+      else if(theta>=90 && theta<=180)  pos2[1]+=0.4;
+      else if(theta>=180 && theta<=270) pos2[0]+=0.1;
+      else if(theta>=270 && theta<=360) pos2[1]-=0.4;
+      avgpos();
+      break;
+  }
   theta+=0.4;
   if(theta > 360.0) theta -= 360.0;
   glutPostRedisplay();
@@ -73,6 +127,7 @@ void key(unsigned char ch,int x,int y)
 {
    if (ch == 27) exit(0);  //escape ends program
    else if (ch == '0')  th = ph = 0;
+   else if (ch == 'm') mode = (mode+1)%3;
    glutPostRedisplay();
 }
 
@@ -87,6 +142,9 @@ int main(int argc, char* argv[]){
   glutReshapeFunc(reshape);
   glutSpecialFunc(special);
   glutKeyboardFunc(key);
+
+  sky[0] = LoadTexBMP("static.bmp");
+
   glutMainLoop();
 
 }

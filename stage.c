@@ -1,6 +1,6 @@
 #include "fd.h"
 
-static void sphere(double x,double y,double z,
+void sphere(double x,double y,double z,
                    double r, int tex) //FROM ex8
 {
    const int d=15;

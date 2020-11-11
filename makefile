@@ -26,10 +26,16 @@ endif
 # Dependencies
 fd.o: fd.c fd.h
 stage.o: stage.c fd.h
+fatal.o: fatal.c fd.h
+loadtexbmp.o: loadtexbmp.c fd.h
+print.o: print.c fd.h
+project.o: project.c fd.h
+errcheck.o: errcheck.c fd.h
+object.o: object.c fd.h
 
 
 #  Create archive
-fd.a:stage.o
+fd.a:fatal.o loadtexbmp.o print.o project.o errcheck.o object.o stage.o
 	ar -rcs $@ $^
 
 # Compile rules
