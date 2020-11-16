@@ -14,37 +14,100 @@
 #endif
 //OS portability ^^
 
-int ww = 500;
-int hh = 500; //width and height of window
+int ww = 500; //width and height of window
+int hh = 500;
 int fov=55; //  perspective attributes - fov
 double asp=1; // aspect ratio
 double dim=60; //size of world
-double theta = 0; //idle variable
-int th, ph = 0; //viewing angles
-int mode = 1; //camera mode
+double theta, zeta = 0; //idle variable
+int th = 0; //viewing angles
+int ph = 10;
+int mode = 0; //movement mode
 unsigned int sky[3];
 unsigned int tex[5];
 double pos1[3]={-20.0,5.0,0.0};
 double pos2[3]={ 20.0,5.0,0.0};
 double posavg[3];
-int state1[2]={1,1};
 
 
 //Globals ^^
 
-static void skybox(double D)
+static void skybox(double D) //skybox function adapted from ex24.
 {
+   glPushMatrix();
+
    glColor3f(1,1,1);
    glEnable(GL_TEXTURE_2D);
    glBindTexture(GL_TEXTURE_2D,sky[0]);
    glBegin(GL_QUADS);
-   glTexCoord2f(1,0); glVertex3f(+D,-D,-D);
+   glTexCoord2f(1,0); glVertex3f(+D,-D,-D); //front quad
    glTexCoord2f(0,0); glVertex3f(-D,-D,-D);
    glTexCoord2f(0,1); glVertex3f(-D,+D,-D);
    glTexCoord2f(1,1); glVertex3f(+D,+D,-D);
+
+   glTexCoord2f(1,0); glVertex3f(-D,-D,+D); //left quad
+   glTexCoord2f(0,0); glVertex3f(-D,-D,-D);
+   glTexCoord2f(0,1); glVertex3f(-D,+D,-D);
+   glTexCoord2f(1,1); glVertex3f(-D,+D,+D);
+
+   glTexCoord2f(1,0); glVertex3f(+D,-D,+D); //right quad
+   glTexCoord2f(0,0); glVertex3f(+D,-D,-D);
+   glTexCoord2f(0,1); glVertex3f(+D,+D,-D);
+   glTexCoord2f(1,1); glVertex3f(+D,+D,+D);
+
+   glTexCoord2f(1,0); glVertex3f(+D,+D,-D); //top quad
+   glTexCoord2f(0,0); glVertex3f(-D,+D,-D);
+   glTexCoord2f(0,1); glVertex3f(-D,+D,+D);
+   glTexCoord2f(1,1); glVertex3f(+D,+D,+D);
+
+   glTexCoord2f(1,0); glVertex3f(+D,-D,-D); //bottom quad
+   glTexCoord2f(0,0); glVertex3f(-D,-D,-D);
+   glTexCoord2f(0,1); glVertex3f(-D,-D,+D);
+   glTexCoord2f(1,1); glVertex3f(+D,-D,+D);
+
+   glTexCoord2f(1,0); glVertex3f(+D,-D,+D); //back quad
+   glTexCoord2f(0,0); glVertex3f(-D,-D,+D);
+   glTexCoord2f(0,1); glVertex3f(-D,+D,+D);
+   glTexCoord2f(1,1); glVertex3f(+D,+D,+D);
    glEnd();
+
    glDisable(GL_TEXTURE_2D);
+
+   glRotated(theta,0,1,0);
+
+   glColor3f(0.0,1.0,0.0);
+   for(int i = 0; i<25; i++){
+     glRotated(zeta+i+10,0,1,0);
+     (i%2==0) ? glTranslated(0,i*i,0) : glTranslated(0,-i*i,0);
+     glBegin(GL_LINE_STRIP);
+     glVertex3f(3*dim,-4*dim,0);
+     glVertex3f(3*dim,-4*dim,40);
+     glVertex3f(3*dim,-3*dim,40);
+     glVertex3f(3*dim,-3*dim,-25);
+     glVertex3f(3*dim,-2*dim,-25);
+     glVertex3f(3*dim,-2*dim,0);
+     glVertex3f(3*dim,-dim,0);
+     glVertex3f(3*dim,-dim,50);
+     glVertex3f(3*dim,0,50);
+     glVertex3f(3*dim,0,-20);
+     glVertex3f(3*dim,dim,-20);
+     glVertex3f(3*dim,dim,10);
+     glVertex3f(3*dim,2*dim,10);
+     glVertex3f(3*dim,2*dim,-30);
+     glVertex3f(3*dim,3*dim,-30);
+     glVertex3f(3*dim,3*dim,30);
+     glVertex3f(3*dim,4*dim,30);
+     glEnd();
+   }
+
+
+   glPopMatrix();
 }
+
+void Falco(double x, double y, double z){
+
+}
+
 
 void avgpos(){
   posavg[0]=(pos1[0]+pos2[0])/2;
@@ -93,7 +156,9 @@ void idle()//Simple idle func from OpenGL: A Primer by Edward Angel
       break;
   }
   theta+=0.4;
+  zeta+=0.004;
   if(theta > 360.0) theta -= 360.0;
+  if(zeta > 360.0) zeta -= 360.0;
   glutPostRedisplay();
 }
 

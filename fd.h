@@ -27,12 +27,9 @@ extern "C" {
 void stage(double x,double y, double z, double dx, double dy, double dz, double th);
 void stagePoly(double x, double y, double z, double dx, double dy, double dz, double th, double s);
 void sphere(double x,double y,double z, double r, int tex);
-void Print(const char* format , ...);
 void Fatal(const char* format , ...);
 unsigned int LoadTexBMP(const char* file);
-void Project(double fov,double asp,double dim);
 void ErrCheck(const char* where);
-int  LoadOBJ(const char* file);
 
 #ifdef __cplusplus
 }
