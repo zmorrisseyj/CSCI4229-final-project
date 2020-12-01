@@ -1,5 +1,5 @@
 
-EXE=fd
+EXE=final
 
 # Main target
 all: $(EXE)
@@ -24,15 +24,17 @@ CLEAN=rm -f $(EXE) *.o *.a
 endif
 
 # Dependencies
-fd.o: fd.c fd.h
+final.o: final.c fd.h
 stage.o: stage.c fd.h
+skybox.o: skybox.c fd.h
 fatal.o: fatal.c fd.h
 loadtexbmp.o: loadtexbmp.c fd.h
 errcheck.o: errcheck.c fd.h
+falco.o: falco.c fd.h
 
 
 #  Create archive
-fd.a:fatal.o loadtexbmp.o errcheck.o stage.o
+final.a:fatal.o loadtexbmp.o errcheck.o stage.o skybox.o falco.o
 	ar -rcs $@ $^
 
 # Compile rules
@@ -42,7 +44,7 @@ fd.a:fatal.o loadtexbmp.o errcheck.o stage.o
 	g++ -c $(CFLG) $<
 
 #  Link
-fd:fd.o fd.a
+final:final.o final.a
 	gcc -O3 -o $@ $^   $(LIBS)
 
 #  Clean

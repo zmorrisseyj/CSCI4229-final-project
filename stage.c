@@ -1,15 +1,10 @@
 #include "fd.h"
 
 void sphere(double x,double y,double z,
-                   double r, int tex) //FROM ex8
+                   double r) //FROM ex8
 {
    const int d=15;
    int th,ph;
-   if (tex<0 || tex>7){
-     printf("texture does not exist");
-     exit(0);
-   }
-
    //  Save transformation
    glPushMatrix();
    //  Offset and scale
@@ -18,7 +13,7 @@ void sphere(double x,double y,double z,
 
    glEnable(GL_TEXTURE_2D);
 
-
+   glBindTexture(GL_TEXTURE_2D,tex[1]);
    //  Latitude bands
    for (ph=-90;ph<90;ph+=d)
    {
@@ -47,13 +42,14 @@ void stagePoly(double x, double y, double z,
   glScaled(dx,dy,dz);
 
   glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, tex[2]);
 
   glColor3f(0.1,0.075,0.1);
   glBegin(GL_QUAD_STRIP);
 
   glNormal3d(0,0,1); //front surface, same normal throughout
-  glTexCoord2f(1,1);           glVertex3d(30,0,3);
-  glTexCoord2f(0.9167,1);      glVertex3d(25,0,3);
+  glTexCoord2f(1,1);           glVertex3d(30,-1,3);
+  glTexCoord2f(0.9167,1);      glVertex3d(25,-1,3);
 
   glTexCoord2f(1,0.5);         glVertex3d(30,-15,3);
   glTexCoord2f(0.9167,0.5);    glVertex3d(25,-15,3);
@@ -70,17 +66,12 @@ void stagePoly(double x, double y, double z,
   glTexCoord2f(0.0833,0.5);    glVertex3d(-25,-15,3);
   glTexCoord2f(0,0.5);         glVertex3d(-30,-15,3);
 
-  glTexCoord2f(0.0833,1);      glVertex3d(-25,0,3);
-  glTexCoord2f(0,1);           glVertex3d(-30,0,3);
-
-  glEnd();
-
-
-  glBegin(GL_QUAD_STRIP);
+  glTexCoord2f(0.0833,1);      glVertex3d(-25,-1,3);
+  glTexCoord2f(0,1);           glVertex3d(-30,-1,3);
 
   glNormal3d(0,0,-1);//back surface, same normal throughout
-  glTexCoord2f(1,1);           glVertex3d(-30,0,-3);
-  glTexCoord2f(0.9167,1);      glVertex3d(-25,0,-3);
+  glTexCoord2f(1,1);           glVertex3d(-30,-1,-3);
+  glTexCoord2f(0.9167,1);      glVertex3d(-25,-1,-3);
 
   glTexCoord2f(1,0.5);         glVertex3d(-30,-15,-3);
   glTexCoord2f(0.9167,0.5);    glVertex3d(-25,-15,-3);
@@ -97,8 +88,8 @@ void stagePoly(double x, double y, double z,
   glTexCoord2f(0.0833,0.5);    glVertex3d(25,-15,-3);
   glTexCoord2f(0,0.5);         glVertex3d(30,-15,-3);
 
-  glTexCoord2f(0.0833,1);      glVertex3d(25,0,-3);
-  glTexCoord2f(0,1);           glVertex3d(30,0,-3);
+  glTexCoord2f(0.0833,1);      glVertex3d(25,-1,-3);
+  glTexCoord2f(0,1);           glVertex3d(30,-1,-3);
 
   glEnd();
 
@@ -106,8 +97,8 @@ void stagePoly(double x, double y, double z,
   glBegin(GL_QUADS);
 
   glNormal3d(1,0,0); //Outer surface, needs several normals
-  glTexCoord2f(1,1); glVertex3d(30,0,-3);
-  glTexCoord2f(0,1); glVertex3d(30,0,3);
+  glTexCoord2f(1,1); glVertex3d(30,-1,-3);
+  glTexCoord2f(0,1); glVertex3d(30,-1,3);
   glTexCoord2f(0,0); glVertex3d(30,-15,3);
   glTexCoord2f(1,0); glVertex3d(30,-15,-3);
 
@@ -138,19 +129,13 @@ void stagePoly(double x, double y, double z,
   glNormal3d(-1,0,0);
   glTexCoord2f(0,0); glVertex3d(-30,-15,-3);
   glTexCoord2f(1,0); glVertex3d(-30,-15,3);
-  glTexCoord2f(1,1); glVertex3d(-30,0,3);
-  glTexCoord2f(0,1); glVertex3d(-30,0,-3);
-
-  glEnd();
-
-
-
-  glBegin(GL_QUADS);
+  glTexCoord2f(1,1); glVertex3d(-30,-1,3);
+  glTexCoord2f(0,1); glVertex3d(-30,-1,-3);
 
   glColor3f(0.1,0.075,0.1);
   glNormal3d(1,0,0); //inner surface, needs several normals
-  glTexCoord2f(1,1); glVertex3d(-25,0,-3);
-  glTexCoord2f(0,1); glVertex3d(-25,0,3);
+  glTexCoord2f(1,1); glVertex3d(-25,-1,-3);
+  glTexCoord2f(0,1); glVertex3d(-25,-1,3);
   glTexCoord2f(0,0); glVertex3d(-25,-15,3);
   glTexCoord2f(1,0); glVertex3d(-25,-15,-3);
 
@@ -181,13 +166,12 @@ void stagePoly(double x, double y, double z,
   glNormal3d(-1,0,0);
   glTexCoord2f(0,0); glVertex3d(25,-15,-3);
   glTexCoord2f(1,0); glVertex3d(25,-15,3);
-  glTexCoord2f(1,1); glVertex3d(25,0,3);
-  glTexCoord2f(0,1); glVertex3d(25,0,-3);
-
+  glTexCoord2f(1,1); glVertex3d(25,-1,3);
+  glTexCoord2f(0,1); glVertex3d(25,-1,-3);
   glEnd();
-
-
   glDisable(GL_TEXTURE_2D);
+
+
 
   glBegin(GL_LINE_STRIP);
   glColor3f(1,0,1); //Outer surface highlight
@@ -244,10 +228,10 @@ void stage(double x,double y, double z,
 {
   glPushMatrix();
   glTranslated(x,y,z);
-  //glRotated(th,0,1,0);
   glScaled(dx,dy,dz);
 
   glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D,tex[0]);
   glColor3f(0.2,0.2,0.2);
   glBegin(GL_POLYGON); //Top octagon
   glNormal3d(0,1,0);
@@ -276,7 +260,7 @@ void stage(double x,double y, double z,
   glTexCoord2f(1,0.333); glVertex3d(50,-1,10);
   glEnd();
 
-
+  glBindTexture(GL_TEXTURE_2D,tex[2]);
   glBegin(GL_QUADS); //border quads to complete octagonal disk
   glNormal3d(1,0,0);
   glTexCoord2f(0,1); glVertex3d(50,0,10);
@@ -327,6 +311,7 @@ void stage(double x,double y, double z,
   glTexCoord2f(1,0); glVertex3d(30,-1,30);
 
   glColor3f(0.1,0.1,0.1); //Sloped quads under stage
+  glBindTexture(GL_TEXTURE_2D,tex[2]);
   glNormal3d(1,-1,0);
   glTexCoord2f(0,1); glVertex3d(40,0,10);
   glTexCoord2f(1,1); glVertex3d(40,0,-10);
@@ -384,6 +369,7 @@ void stage(double x,double y, double z,
 
 
 
+
   //Under Stage Rotating Polyons with Highlights
   stagePoly(0,0,0,0.99,1,1,th,1);
   stagePoly(0,0,0,0.99,1,1,th+90,1);
@@ -392,7 +378,7 @@ void stage(double x,double y, double z,
 
 
   glColor3f(0.1,0.075,0.5);
-  sphere(0, -15, 0, 10,2);
+  sphere(0, -15, 0, 12);
 
 
   glDisable(GL_TEXTURE_2D); //only highlight lines from here, no lighting or textures
@@ -435,6 +421,112 @@ void stage(double x,double y, double z,
   glVertex3d(30.1,-2,30.1);
   glVertex3d(50.1,-2,10.1);
   glEnd();
+
+
+  glBindTexture(GL_TEXTURE_2D,tex[4]);
+  for (int i = 0; i<360; i+=45)
+  {
+    glEnable(GL_TEXTURE_2D);
+    glRotated(i,0,1,0);
+    glColor3f(0.2,0,1);
+    glBegin(GL_QUADS);
+    glNormal3d(3,-2,0);
+    glTexCoord2f(0,0); glVertex3d(25,-25,-3);
+    glTexCoord2f(1,0); glVertex3d(25,-25,3);
+    glTexCoord2f(1,1); glVertex3d(35,-10,3);
+    glTexCoord2f(0,1); glVertex3d(35,-10,-3);
+    glNormal3d(7,-2,0);
+    glTexCoord2f(0,0); glVertex3d(33,-10,5);
+    glTexCoord2f(1,0); glVertex3d(33,-10,7);
+    glTexCoord2f(1,1); glVertex3d(35,-3,7);
+    glTexCoord2f(0,1); glVertex3d(35,-3,5);
+    glNormal3d(7,-2,0);
+    glTexCoord2f(0,0); glVertex3d(33,-10,-5);
+    glTexCoord2f(1,0); glVertex3d(33,-10,-7);
+    glTexCoord2f(1,1); glVertex3d(35,-3,-7);
+    glTexCoord2f(0,1); glVertex3d(35,-3,-5);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    glColor3f(0,1,0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(25,-25,-3);
+    glVertex3d(25,-25,3);
+    glVertex3d(35,-10,3);
+    glVertex3d(35,-10,-3);
+    glEnd();
+    glColor3f(1,0.5,0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(33,-10,5);
+    glVertex3d(33,-10,7);
+    glVertex3d(35,-3,7);
+    glVertex3d(35,-3,5);
+    glEnd();
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(33,-10,-5);
+    glVertex3d(33,-10,-7);
+    glVertex3d(35,-3,-7);
+    glVertex3d(35,-3,-5);
+    glEnd();
+  }
+  glTranslated(0,-10,0);
+  glRotated(th,0,1,0);
+  glScaled(0.83,0.83,0.83);
+  for (int i = 0; i<360; i+=45)
+  {
+    glEnable(GL_TEXTURE_2D);
+    glRotated(i,0,1,0);
+    glColor3f(0.2,0,1);
+    glBegin(GL_QUADS);
+    glNormal3d(3,-2,0);
+    glTexCoord2f(0,0); glVertex3d(25,-25,-3);
+    glTexCoord2f(1,0); glVertex3d(25,-25,3);
+    glTexCoord2f(1,1); glVertex3d(35,-10,3);
+    glTexCoord2f(0,1); glVertex3d(35,-10,-3);
+    glNormal3d(7,-2,0);
+    glTexCoord2f(0,0); glVertex3d(33,-10,5);
+    glTexCoord2f(1,0); glVertex3d(33,-10,7);
+    glTexCoord2f(1,1); glVertex3d(35,-3,7);
+    glTexCoord2f(0,1); glVertex3d(35,-3,5);
+    glNormal3d(7,-2,0);
+    glTexCoord2f(0,0); glVertex3d(33,-10,-5);
+    glTexCoord2f(1,0); glVertex3d(33,-10,-7);
+    glTexCoord2f(1,1); glVertex3d(35,-3,-7);
+    glTexCoord2f(0,1); glVertex3d(35,-3,-5);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    glColor3f(0,1,0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(25,-25,-3);
+    glVertex3d(25,-25,3);
+    glVertex3d(35,-10,3);
+    glVertex3d(35,-10,-3);
+    glEnd();
+    glColor3f(1,0.5,0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(33,-10,5);
+    glVertex3d(33,-10,7);
+    glVertex3d(35,-3,7);
+    glVertex3d(35,-3,5);
+    glEnd();
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(33,-10,-5);
+    glVertex3d(33,-10,-7);
+    glVertex3d(35,-3,-7);
+    glVertex3d(35,-3,-5);
+    glEnd();
+  }
+
+  glBegin(GL_QUAD_STRIP);
+  for(int i = 0; i<=360; i++)
+  {
+    glNormal3d(Sin(i),0,Cos(i));
+    glColor4f(0.8,0.8,0.8,0.4);
+    glVertex3f(2*Sin(i),-1,2*Cos(i));
+    glColor4f(0,0,0,0.3);
+    glVertex3f(2*Sin(i),-100,2*Cos(i));
+  }
+  glEnd();
+
 
   glPopMatrix();
 }

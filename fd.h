@@ -24,9 +24,13 @@
 extern "C" {
 #endif
 
+
+unsigned int tex[7];
+void Falco(double s, double x, double y, double z);
+void skybox(double D, double dim, double theta);
 void stage(double x,double y, double z, double dx, double dy, double dz, double th);
 void stagePoly(double x, double y, double z, double dx, double dy, double dz, double th, double s);
-void sphere(double x,double y,double z, double r, int tex);
+void sphere(double x,double y,double z, double r);
 void Fatal(const char* format , ...);
 unsigned int LoadTexBMP(const char* file);
 void ErrCheck(const char* where);

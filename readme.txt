@@ -1,1 +1,12 @@
-readme
+Zach Morrissey
+Willem Schreuder
+CSCI 4229
+24 November 2020
+
+Final project checkpoint
+
+Running the code: standard openGL compilation with make clean, make, exe is called final. The user can change the viewing angle with the arrow keys, 0 to reset. m changes the mode and will change the behaviour of the spheres to show the camera functionality. Z and z change the z component of the light, but for some reason x and y won't take input - debugging that this week.
+
+Borrowed Code: I borrowed and adapted the makefile, idle, reshape, skybox, and header file. The makefile is very similar to the original. I added code to the idle function to create the sphere movement for showing camera functionality. The reshape is pretty simple and mostly adapted from the book. My skybox function is also adapted from an example, but is quite simple. I added some other shapes to the function since they fit my scene. The lighting functionality is a simple implementation that I borrowed and simplified from hw6. The sphere function was also borrowed from an example but I added texture coordinates to it.
+
+What I added: I have spent a good amount of time breaking up each function into different files so final.c is very clean and simple. At the same time I've been cleaning up the code to draw everything with the least amount of vertices and to cleanly manipulate the state machine so we don't leave it in any undesired state and it doesn't repeat a transformation ad the program runs on (should be a given right? gave me trouble though). With the polished stage geometry, I then experimented and searched for the best textures to apply to each part. One useful thing I found which probably isn't very profound is that declaring the array for texture storage in the header file allows us to properly call global textures within each separate function file giving me some better organization. With the way I have the files and program generally organized allows for easy additions for even the most complex shapes. This was an important focus for me since I've been procrastinating a complex character model until I was comfortable with the program organization and everything was operating as desired. The next week I will continue tweaking my textures and debugging the light position issue, but my main focus will be to implement a complex character model. Since I am running behind schedule I anticipate calculating it a lot by hand. Once I get a good hard coded version of the desired character, I will look into implementing tesselation to improve the existing model. I also have an idea for a rounded disk surface that shouldn't be too hard to implement and would be a good addition to the stage geometry.
