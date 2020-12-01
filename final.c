@@ -27,9 +27,9 @@ int ambient   =   30;  // Ambient intensity (%)
 int diffuse   =  30;  // Diffuse intensity (%)
 int specular  =  60;  // Specular intensity (%)
 int shininess =   2;  // Shininess (power of two)
-int x = 50;
-int y = -10;
-int z = 30;
+int xx = 20;
+int yy = 10;
+int zz = 0;
 //Globals ^^
 
 double avgpos(){
@@ -52,9 +52,9 @@ void display()
   float Diffuse[]   = {0.01*diffuse ,0.01*diffuse ,0.01*diffuse ,1.0};
   float Specular[]  = {0.01*specular,0.01*specular,0.01*specular,1.0};
   float Position[3];
-  Position[0] = x;
-  Position[1] = y;
-  Position[2] = z;
+  Position[0] = xx;
+  Position[1] = yy;
+  Position[2] = zz;
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glLoadIdentity();
@@ -74,14 +74,13 @@ void display()
   glLightfv(GL_LIGHT0,GL_DIFFUSE ,Diffuse);
   glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
   glColor3f(1,1,1);
-  sphere(x,y,z,2);
+  sphere(xx,yy,zz,2,0);
   glLightfv(GL_LIGHT0,GL_POSITION,Position);
 
   stage(1,1,1,1,1,1,theta);
-  sphere(pos1[0],pos1[1],pos1[2],3);
-  sphere(pos2[0],pos2[1],pos2[2],3);
+  Falco(1,pos1[0],pos1[1],pos1[2],0);
+  Falco(1,pos2[0],pos2[1],pos2[2],180);
   skybox(3.5*dim, dim, theta);
-  Falco(10,0,0,0);
   glutSwapBuffers();
 }
 
@@ -145,12 +144,13 @@ void key(unsigned char ch,int x,int y)
    if      (ch == 27)            exit(0);  //escape ends program
    else if (ch == '0')       th = ph = 0;
    else if (ch == 'm') mode = (mode+1)%3;
-   else if (ch == 'x')              x-=1;
-   else if (ch == 'X')              x+=1;
-   else if (ch == 'y')              y-=1;
-   else if (ch == 'Y')              y+=1;
-   else if (ch == 'z')              z-=1;
-   else if (ch == 'Z')              z+=1;
+   else if (ch == 'z')              zz-=1;
+   else if (ch == 'Z')              zz+=1;
+   else if (ch == 'x')              xx-=1;
+   else if (ch == 'X')              xx+=1;
+   else if (ch == 'y')              yy-=1;
+   else if (ch == 'Y')              yy+=1;
+
    glutPostRedisplay();
 }
 

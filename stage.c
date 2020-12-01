@@ -1,7 +1,7 @@
 #include "fd.h"
 
 void sphere(double x,double y,double z,
-                   double r) //FROM ex8
+                   double r,int mtex) //FROM ex8
 {
    const int d=15;
    int th,ph;
@@ -11,10 +11,13 @@ void sphere(double x,double y,double z,
    glTranslated(x,y,z);
    glScaled(r,r,r);
 
-   glEnable(GL_TEXTURE_2D);
+   if(mtex){
+     glEnable(GL_TEXTURE_2D);
+     glBindTexture(GL_TEXTURE_2D,tex[1]);
+   }
 
-   glBindTexture(GL_TEXTURE_2D,tex[1]);
    //  Latitude bands
+   glColor3f(1,1,1);
    for (ph=-90;ph<90;ph+=d)
    {
       glBegin(GL_QUAD_STRIP);
@@ -30,7 +33,7 @@ void sphere(double x,double y,double z,
 
    //  Undo transformations
    glPopMatrix();
-   glDisable(GL_TEXTURE_2D);
+   if (mtex) glDisable(GL_TEXTURE_2D);
 }
 
 void stagePoly(double x, double y, double z,
@@ -378,7 +381,8 @@ void stage(double x,double y, double z,
 
 
   glColor3f(0.1,0.075,0.5);
-  sphere(0, -15, 0, 12);
+  sphere(0, -15, 0, 12,1);
+
 
 
   glDisable(GL_TEXTURE_2D); //only highlight lines from here, no lighting or textures
@@ -516,6 +520,8 @@ void stage(double x,double y, double z,
     glEnd();
   }
 
+
+
   glBegin(GL_QUAD_STRIP);
   for(int i = 0; i<=360; i++)
   {
@@ -526,6 +532,33 @@ void stage(double x,double y, double z,
     glVertex3f(2*Sin(i),-100,2*Cos(i));
   }
   glEnd();
+
+
+  glTranslated(0,-30,0);
+  glRotated(th,0,1,0);
+  glRotated(90,0,0,1);
+  glScaled(30,30,30);
+  //crazy curved surface I generated paritally by accident
+  glColor3f(0.5,0,0.5);
+  for(double i = -0.4; i<=0.45; i+=0.05){
+    if(i<0){
+      glBegin(GL_QUAD_STRIP);
+      for(int j = 0; j<=360; j++){
+        glNormal3d(Sin(j),-1*i,Cos(j));        glVertex3d(Sin(j)*i*i,i,Cos(j)*i*i);
+        glNormal3d(Sin(j),-1*i+0.05,Cos(j));   glVertex3d(Sin(j)*(-1*i+0.05)*(-1*i+0.05),i+0.05,Cos(j)*(-1*i+0.05)*(-1*i+0.05));
+      }
+      glEnd();
+    }
+    else{
+      glBegin(GL_QUAD_STRIP);
+      for(int j = 0; j<=360; j++){
+        glNormal3d(Sin(j),-1*i,Cos(j));     glVertex3d(Sin(j)*i*i,                     i,      Cos(j)*i*i);
+        glNormal3d(Sin(j),i+0.05,Cos(j));   glVertex3d(Sin(j)*(-1*i+0.05)*(-1*i+0.05), i+0.05, Cos(j)*(-1*i+0.05)*(-1*i+0.05));
+      }
+      glEnd();
+    }
+  }
+
 
 
   glPopMatrix();
