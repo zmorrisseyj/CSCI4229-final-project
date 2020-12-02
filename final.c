@@ -19,6 +19,7 @@ double theta = 0; //idle variable
 int th = 0; //viewing angles
 int ph = 10;
 int mode = 0; //movement mode
+int omode = 1; //object mode
 double pos1[3]={-20.0,5.0,0.0};
 double pos2[3]={ 20.0,5.0,0.0};
 double posavg[3];
@@ -28,7 +29,7 @@ int diffuse   =  30;  // Diffuse intensity (%)
 int specular  =  60;  // Specular intensity (%)
 int shininess =   2;  // Shininess (power of two)
 int xx = 20;
-int yy = 10;
+int yy = 30;
 int zz = 0;
 //Globals ^^
 
@@ -73,14 +74,24 @@ void display()
   glLightfv(GL_LIGHT0,GL_AMBIENT ,Ambient);
   glLightfv(GL_LIGHT0,GL_DIFFUSE ,Diffuse);
   glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
+
+  switch(omode){
+    case 0:
+      stage(1,1,1,1,1,1,theta);
+      Falco(1,pos1[0],pos1[1],pos1[2],0);
+      Falco(1,pos2[0],pos2[1],pos2[2],180);
+      skybox(3.5*dim, dim, theta);
+      break;
+    case 1:
+      Falco(3,-10,-20,0,0);
+      mode = 0;
+      skybox(3.5*dim, dim, theta);
+      break;
+  }
   glColor3f(1,1,1);
   sphere(xx,yy,zz,2,0);
   glLightfv(GL_LIGHT0,GL_POSITION,Position);
-
-  stage(1,1,1,1,1,1,theta);
-  Falco(1,pos1[0],pos1[1],pos1[2],0);
-  Falco(1,pos2[0],pos2[1],pos2[2],180);
-  skybox(3.5*dim, dim, theta);
+  ErrCheck("display");
   glutSwapBuffers();
 }
 
@@ -143,7 +154,8 @@ void key(unsigned char ch,int x,int y)
 {
    if      (ch == 27)            exit(0);  //escape ends program
    else if (ch == '0')       th = ph = 0;
-   else if (ch == 'm') mode = (mode+1)%3;
+   else if (ch == 'm'||ch == 'M') mode = (mode+1)%3;
+   else if (ch == 'o'||ch == 'O') omode = 1-omode;
    else if (ch == 'z')              zz-=1;
    else if (ch == 'Z')              zz+=1;
    else if (ch == 'x')              xx-=1;

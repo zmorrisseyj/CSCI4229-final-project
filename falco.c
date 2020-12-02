@@ -127,23 +127,23 @@ void torso(double s, double x, double y, double z){
   glBegin(GL_QUAD_STRIP);
   for(double i = 0; i <= 8; i+= 0.5){//front of torso
     glNormal3d(1,-0.066,0);  glVertex3d(1,i,2+i/15);
-    glNormal3d(1,-0.066,0); glVertex3d(1,i,-2-i/15);
+    glNormal3d(1,-0.066,0);  glVertex3d(1,i,-2-i/15);
   }
   glEnd();
   glBegin(GL_QUAD_STRIP);
   for(double i = 0; i <= 8; i+= 0.5){//back of torso
     glNormal3d(-1,-0.066,0);  glVertex3d(-1,i,2+i/15);
-    glNormal3d(-1,-0.066,0); glVertex3d(-1,i,-2-i/15);
+    glNormal3d(-1,-0.066,0);  glVertex3d(-1,i,-2-i/15);
   }
   glEnd();
   glBegin(GL_QUAD_STRIP);
   for(int j = 0; j <= 180; j+= 30){//top of torso
     glNormal3d(Cos(j),Sin(j),0);  glVertex3d(Cos(j),Sin(j)+8,2.533);
-    glNormal3d(Cos(j),Sin(j),0); glVertex3d(Cos(j),Sin(j)+8,-2.533);
+    glNormal3d(Cos(j),Sin(j),0);  glVertex3d(Cos(j),Sin(j)+8,-2.533);
   }
   glEnd();
 
-  for(double i = 0; i <= 8; i+= 0.5){//positive z side
+  for(double i = 0; i < 8; i+= 0.5){//positive z side
     glBegin(GL_QUAD_STRIP);
     for(int j = 0; j<=180; j+=30){
       glNormal3d(Cos(j),0,Sin(j));  glVertex3d(Cos(j),i,2+Sin(j)+i/15);
@@ -151,7 +151,7 @@ void torso(double s, double x, double y, double z){
     }
     glEnd();
   }
-  for(double i = 0; i <= 8; i+= 0.5){//negative z side
+  for(double i = 0; i < 8; i+= 0.5){//negative z side
     glBegin(GL_QUAD_STRIP);
     for(int j = 180; j<=360; j+=30){
       glNormal3d(Cos(j),0,Sin(j));  glVertex3d(Cos(j),i,-2+Sin(j)-i/15);

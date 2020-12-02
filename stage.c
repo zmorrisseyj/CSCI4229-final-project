@@ -314,7 +314,6 @@ void stage(double x,double y, double z,
   glTexCoord2f(1,0); glVertex3d(30,-1,30);
 
   glColor3f(0.1,0.1,0.1); //Sloped quads under stage
-  glBindTexture(GL_TEXTURE_2D,tex[2]);
   glNormal3d(1,-1,0);
   glTexCoord2f(0,1); glVertex3d(40,0,10);
   glTexCoord2f(1,1); glVertex3d(40,0,-10);
